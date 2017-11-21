@@ -7,4 +7,8 @@ import org.apache.spark.ml.param.{Param, Params}
   */
 trait HasOutputCol extends Params {
   val outputCol: Param[String] = new Param[String](this, "outputCol", "Will have the fraction of common words.")
+
+  def getOutputCol = $(outputCol)
+
+  def setOutputCol(value: String): this.type = set(outputCol, value)
 }

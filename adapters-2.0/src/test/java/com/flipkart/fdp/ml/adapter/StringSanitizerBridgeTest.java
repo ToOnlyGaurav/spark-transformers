@@ -28,8 +28,8 @@ public class StringSanitizerBridgeTest extends SparkTestBase {
 		//prepare data
 		JavaRDD<Row> rdd = jsc.parallelize(Arrays.asList(
 				RowFactory.create(1, "Jyoti complex near Sananda clothes store; English Bazar; Malda;WB;India,"),
-				RowFactory.create(1, "hallalli vinayaka tent road c/o B K vishwanath Mandya"),
-				RowFactory.create(1, "M.sathish S/o devudu Lakshmi opticals Gokavaram bus stand Rajhamundry 9494954476")
+				RowFactory.create(2, "hallalli vinayaka tent road c/o B K vishwanath Mandya"),
+				RowFactory.create(3, "M.sathish S/o devudu Lakshmi opticals Gokavaram bus stand Rajhamundry 9494954476")
 		));
 
 		StructType schema = new StructType(new StructField[]{

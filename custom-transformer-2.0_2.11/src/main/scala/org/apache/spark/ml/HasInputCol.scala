@@ -10,4 +10,6 @@ import org.apache.spark.ml.param.{Param, Params}
 * */
 trait HasInputCol extends Params {
   val inputCol: Param[String] = new Param[String](this, "inputCol", "Input should have sanitized split words.")
+
+  def getInputCol = $(inputCol)
 }

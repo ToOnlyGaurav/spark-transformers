@@ -11,32 +11,54 @@ import org.apache.spark.sql.types.{DoubleType, StructField, StructType}
   * Created by vinay.varma on 08/11/16.
   */
 class CommonAddressFeatures(override val uid: String) extends Transformer with HasInputCol with HasRawInputCol with DefaultParamsWritable {
-  val numWordsParam: Param[String] = new Param[String](this, "numWords", "No. of words in cleaned address.")
+
+  def setInputCol(value: String): this.type = set(inputCol, value)
+
+  def setRawInputCol(value: String): this.type = set(rawInputCol, value)
 
   setDefault(inputCol, "sanitizedAddress")
   setDefault(rawInputCol, "mergedAddress")
+
+  val numWordsParam: Param[String] = new Param[String](this, "numWords", "No. of words in cleaned address.")
+  def getNumWordsParam = $(numWordsParam)
+
   val numCommasParam: Param[String] = new Param[String](this, "numCommas", "No. of commas in raw address.")
+  def getNumCommasParams = $(numCommasParam)
+
   val numericPresentParam: Param[String] = new Param[String](this, "numericPresent", "Numbers present in cleaned address.")
+  def getNumericPresentParam = $(numericPresentParam)
+
   val addressLengthParam: Param[String] = new Param[String](this, "addressLength", "Length of cleaned address.")
+  def getAddressLengthParam = $(addressLengthParam)
+
   val favouredStartColParam: Param[String] = new Param[String](this, "favouredStartColParam", "name of col having fav start res.")
+  def getFavouredStartColParam = $(favouredStartColParam)
+
   val unfavouredStartColParam: Param[String] = new Param[String](this, "unfavouredStartColParam", "name of col having un-fav start res.")
+  def getUnfavouredStartColParam = $(unfavouredStartColParam)
+
   val favourableStartsParam = new StringArrayParam(this, "favourableStarts", "Addresses starting with these are good.")
   val unFavourableStartsParam = new StringArrayParam(this, "unFavourableStarts", "Addresses starting with these are bad.")
 
   def this() = this(Identifiable.randomUID("CommonAddressFeatures"))
 
+  val favourableStartWords = Array("plot", "flat", "house", "room")
+  val unfavourableStartWords =Array("near", "opp", "opposite")
+
   setDefault(numWordsParam, "numWords")
   setDefault(numCommasParam, "numCommas")
   setDefault(numericPresentParam, "numericPresent")
   setDefault(addressLengthParam, "addressLength")
-  setDefault(favourableStartsParam, Array("plot", "flat", "house", "room"))
-  setDefault(unFavourableStartsParam, Array("near", "opp", "opposite"))
+  setDefault(favourableStartsParam, favourableStartWords)
+  setDefault(unFavourableStartsParam, unfavourableStartWords )
   setDefault(favouredStartColParam, "favouredStart")
   setDefault(unfavouredStartColParam, "unfavouredStart")
 
   def getOutputParams:Seq[Param[String]] = Seq(numWordsParam, numCommasParam, numericPresentParam, addressLengthParam, favouredStartColParam, unfavouredStartColParam)
 
-  def wordCount = udf((words: Seq[String]) => words.length)
+  def wordCount = udf((words: Seq[String]) => {
+    words.length
+  })
 
   def commaCount = udf((rawLine: String) => rawLine.split(",").length - 1)
 

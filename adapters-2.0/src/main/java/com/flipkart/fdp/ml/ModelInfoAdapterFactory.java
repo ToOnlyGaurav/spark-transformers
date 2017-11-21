@@ -29,6 +29,7 @@ public class ModelInfoAdapterFactory {
         register(new ChiSqSelectorModelInfoAdapter());
         register(new StringMergeInfoAdapter());
         register(new StringSanitizerModelInfoAdapter());
+        register(new CommonAddressFeaturesModelInfoAdapter());
 
     }
 
