@@ -2,6 +2,7 @@ package com.flipkart.fdp.ml;
 
 import com.flipkart.fdp.ml.adapter.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.spark.ml.PopularWordsEstimator;
 
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class ModelInfoAdapterFactory {
         register(new StringMergeInfoAdapter());
         register(new StringSanitizerModelInfoAdapter());
         register(new CommonAddressFeaturesModelInfoAdapter());
+        register(new PopularWordsEstimatorModelInfoAdapter());
 
     }
 

@@ -15,6 +15,8 @@ class PopularWordsEstimator(override val uid: String) extends Estimator[PopularW
   with HasOutputCol {
   val maxPopularWords: Param[Int] = new Param[Int](this, "maxPopularWords", "n popular words.")
 
+  def setInputCol(value: String): this.type = set(inputCol, value)
+
   setDefault(inputCol, "sanitizedAddress")
   setDefault(outputCol, "commonFraction")
 
@@ -44,6 +46,10 @@ class PopularWordsEstimator(override val uid: String) extends Estimator[PopularW
 
 class PopularWordsModel(override val uid: String, val popularWords: Array[String]) extends Model[PopularWordsModel]
   with HasInputCol with HasOutputCol with MLWritable {
+
+  def setInputCol(value: String): this.type = set(inputCol, value)
+
+  def setOutputCol(value: String): this.type = set(outputCol, value)
 
   override def copy(extra: ParamMap): PopularWordsModel = defaultCopy(extra)
 
