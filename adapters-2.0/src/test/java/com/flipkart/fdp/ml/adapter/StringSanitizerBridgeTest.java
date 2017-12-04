@@ -57,10 +57,12 @@ public class StringSanitizerBridgeTest extends SparkTestBase {
 			data.put(sparkModel.getInputCol(), row.getString(0));
 			transformer.transform(data);
 
-			List<String> actual = (List<String>) data.get(sparkModel.getOutputCol());
+			String[] actual = (String[]) data.get(sparkModel.getOutputCol());
+
+			List<String> actualList = Arrays.asList(actual);
 			List<String> expected = row.getList(1);
 
-			assertTrue("both should be same", actual.equals(expected));
+			assertTrue("both should be same", actualList.equals(expected));
 		}
 	}
 }

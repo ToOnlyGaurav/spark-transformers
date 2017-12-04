@@ -21,7 +21,7 @@ public class StringSanitizerTransformer implements Transformer {
 		input.put(modelInfo.getOutputKeys().iterator().next(), transformInput(inp));
 	}
 
-	private List<String> transformInput(String input) {
+	private String[] transformInput(String input) {
 		String s = input.toLowerCase()
 				.replaceAll("\\P{Print}", " ")
 				.replaceAll("[^0-9a-zA-Z ]", " ")
@@ -30,7 +30,7 @@ public class StringSanitizerTransformer implements Transformer {
 				.trim()
 				.replaceAll("\\s+", " ");
 		String[] split = s.split(" ");
-		return Arrays.asList(split);
+		return split;
 	}
 
 	@Override

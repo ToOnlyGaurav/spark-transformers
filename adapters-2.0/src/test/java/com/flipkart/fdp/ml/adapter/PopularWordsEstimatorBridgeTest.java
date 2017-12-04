@@ -4,6 +4,7 @@ import com.flipkart.fdp.ml.export.ModelExporter;
 import com.flipkart.fdp.ml.importer.ModelImporter;
 import com.flipkart.fdp.ml.transformer.Transformer;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.ml.PopularWordsEstimator;
 import org.apache.spark.ml.PopularWordsModel;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -19,8 +20,8 @@ public class PopularWordsEstimatorBridgeTest extends SparkTestBase {
 	@Test
 	public void testPopularWordsEstimator() {
 		final String[] addressLine1 = new String[]{
-				"Jyoti complex near Sananda clothes store; English Bazar; Malda;WB;India"
-				, "hallalli vinayaka tent road c/o B K vishwanath Mandya",
+				"Jyoti complex near Sananda clothes store; English Bazar; Malda;WB;India",
+				"hallalli vinayaka tent road c/o B K vishwanath Mandya",
 				"M.sathish S/o devudu Lakshmi opticals Gokavaram bus stand Rajhamundry 9494954476"
 		};
 
@@ -41,22 +42,25 @@ public class PopularWordsEstimatorBridgeTest extends SparkTestBase {
 		sanitizedAddress.add(mergeAddress[2].split(" "));
 		//prepare data
 		JavaRDD<Row> rdd = jsc.parallelize(Arrays.asList(
-				RowFactory.create(1, sanitizedAddress.get(0)),
-				RowFactory.create(1, sanitizedAddress.get(1)),
-				RowFactory.create(1, sanitizedAddress.get(2))
+				RowFactory.create(1, sanitizedAddress.get(0), 0.0),
+				RowFactory.create(1, sanitizedAddress.get(1), 0.0),
+				RowFactory.create(1, sanitizedAddress.get(2), 1.0)
 		));
 
 		StructType schema = new StructType(new StructField[]{
 				new StructField("id", DataTypes.IntegerType, false, Metadata.empty()),
-				new StructField("sanitizedAddress", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
+				new StructField("sanitizedAddress", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+				new StructField("label", DataTypes.DoubleType, false, Metadata.empty())
+
 		});
 		Dataset<Row> dataset = spark.createDataFrame(rdd, schema);
-		dataset.show();
+		dataset.show(false);
 
-		String[] popularWords = "near clothes Lakshmi".split(" ");
-		PopularWordsModel sparkModel = new PopularWordsModel("123", popularWords)
+		PopularWordsModel sparkModel = new PopularWordsEstimator()
 				.setInputCol("sanitizedAddress")
-				.setOutputCol("commonFraction");
+				.setOutputCol("commonFraction")
+
+				.fit(dataset);
 
 		byte[] exportedModel = ModelExporter.export(sparkModel);
 
@@ -64,7 +68,7 @@ public class PopularWordsEstimatorBridgeTest extends SparkTestBase {
 		Transformer transformer = ModelImporter.importAndGetTransformer(exportedModel);
 
 		Dataset<Row> rowDataset = sparkModel.transform(dataset).orderBy("id").select("sanitizedAddress", "commonFraction");
-		rowDataset.show();
+		rowDataset.show(false);
 
 		assertCorrectness(rowDataset, transformer);
 	}

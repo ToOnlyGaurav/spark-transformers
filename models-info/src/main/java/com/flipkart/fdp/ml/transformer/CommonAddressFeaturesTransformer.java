@@ -1,7 +1,6 @@
 package com.flipkart.fdp.ml.transformer;
 
 import com.flipkart.fdp.ml.modelinfo.CommonAddressFeaturesModelInfo;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -22,15 +21,16 @@ public class CommonAddressFeaturesTransformer implements Transformer {
 		String[] sanitizedAddress = (String[]) input.get(modelInfo.getSanitizedAddressParam());
 		String mergedAddress = (String) input.get(modelInfo.getMergedAddressParam());
 
-		input.put(modelInfo.getNumWordsParam(), sanitizedAddress.length);
-		input.put(modelInfo.getNumCommasParam(), mergedAddress.split(",").length - 1);
+		input.put(modelInfo.getNumWordsParam(), (double)sanitizedAddress.length);
+		input.put(modelInfo.getNumCommasParam(), (double)mergedAddress.split(",").length - 1);
 		input.put(modelInfo.getNumericPresentParam(), getNumericPresent(sanitizedAddress));
 		input.put(modelInfo.getAddressLengthParam(), getAddressLength(sanitizedAddress));
 		input.put(modelInfo.getFavouredStartColParam(), getFavouredStartCol(sanitizedAddress));
 		input.put(modelInfo.getUnfavouredStartColParam(), getUnfavouredStartCol(sanitizedAddress));
 	}
 
-	private int getAddressLength(String[] sanitizedAddress) {
+
+	private double getAddressLength(String[] sanitizedAddress) {
 		return StringUtils.join(sanitizedAddress, " ").length();
 	}
 
@@ -42,7 +42,7 @@ public class CommonAddressFeaturesTransformer implements Transformer {
 		return modelInfo.getUnFavourableStarts().contains(sanitizedAddress[0]) ? 1.0 : 0.0;
 	}
 
-	private int getNumericPresent(String[] sanitizedAddress) {
+	private double getNumericPresent(String[] sanitizedAddress) {
 
 		String address = StringUtils.join(sanitizedAddress, " ");
 		Matcher match = pattern.matcher(address);
@@ -51,11 +51,11 @@ public class CommonAddressFeaturesTransformer implements Transformer {
 
 	@Override
 	public Set<String> getInputKeys() {
-		return null;
+		return modelInfo.getInputKeys();
 	}
 
 	@Override
 	public Set<String> getOutputKeys() {
-		return null;
+		return modelInfo.getOutputKeys();
 	}
 }

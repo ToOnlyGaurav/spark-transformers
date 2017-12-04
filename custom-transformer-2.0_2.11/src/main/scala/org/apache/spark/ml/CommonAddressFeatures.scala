@@ -64,8 +64,8 @@ class CommonAddressFeatures(override val uid: String) extends Transformer with H
 
   def numericPresent = udf { (words: Seq[String]) =>
     "[0-9]".r.findFirstIn(words.mkString(" ")) match {
-      case Some(_) => 1
-      case None => 0
+      case Some(_) => 1.0
+      case None => 0.0
     }
   }
 
@@ -91,10 +91,10 @@ class CommonAddressFeatures(override val uid: String) extends Transformer with H
 
   override def transform(dataset: Dataset[_]): DataFrame = {
     dataset
-      .withColumn($(numWordsParam), wordCount(col($(inputCol))))
-      .withColumn($(numCommasParam), commaCount(col($(rawInputCol))))
+      .withColumn($(numWordsParam), wordCount(col($(inputCol))).cast(DoubleType))
+      .withColumn($(numCommasParam), commaCount(col($(rawInputCol))).cast(DoubleType))
       .withColumn($(numericPresentParam), numericPresent(col($(inputCol))))
-      .withColumn($(addressLengthParam), addressLength(col($(inputCol))))
+      .withColumn($(addressLengthParam), addressLength(col($(inputCol))).cast(DoubleType))
       .withColumn($(favouredStartColParam), favouredStart(col($(inputCol))))
       .withColumn($(unfavouredStartColParam), unfavouredStart(col($(inputCol))))
   }

@@ -5,6 +5,8 @@ import org.apache.spark.ml.CommonAddressFeatures;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 public class CommonAddressFeaturesModelInfoAdapter extends AbstractModelInfoAdapter<CommonAddressFeatures, CommonAddressFeaturesModelInfo> {
@@ -23,6 +25,20 @@ public class CommonAddressFeaturesModelInfoAdapter extends AbstractModelInfoAdap
 		modelInfo.setAddressLengthParam(from.getAddressLengthParam());
 		modelInfo.setFavouredStartColParam(from.getFavouredStartColParam());
 		modelInfo.setUnfavouredStartColParam(from.getUnfavouredStartColParam());
+
+		Set<String> inputKeys = new LinkedHashSet<>();
+		inputKeys.add(from.getInputCol());
+		inputKeys.add(from.getRawInputCol());
+		modelInfo.setInputKeys(inputKeys);
+
+		Set<String> outputKeys = new LinkedHashSet<>();
+		outputKeys.add(from.getNumWordsParam());
+		outputKeys.add(from.getNumCommasParams());
+		outputKeys.add(from.getNumericPresentParam());
+		outputKeys.add(from.getAddressLengthParam());
+		outputKeys.add(from.getFavouredStartColParam());
+		outputKeys.add(from.getUnfavouredStartColParam());
+		modelInfo.setOutputKeys(outputKeys);
 
 		return modelInfo;
 	}

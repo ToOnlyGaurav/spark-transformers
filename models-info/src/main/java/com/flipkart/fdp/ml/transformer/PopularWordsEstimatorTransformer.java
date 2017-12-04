@@ -35,11 +35,11 @@ public class PopularWordsEstimatorTransformer implements Transformer {
 
 	@Override
 	public Set<String> getInputKeys() {
-		return null;
+		return modelInfo.getInputKeys();
 	}
 
 	@Override
 	public Set<String> getOutputKeys() {
-		return null;
+		return modelInfo.getOutputKeys();
 	}
 }

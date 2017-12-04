@@ -17,6 +17,8 @@ class PopularWordsEstimator(override val uid: String) extends Estimator[PopularW
 
   def setInputCol(value: String): this.type = set(inputCol, value)
 
+  def setOutputCol(value: String): this.type = set(outputCol, value)
+
   setDefault(inputCol, "sanitizedAddress")
   setDefault(outputCol, "commonFraction")
 
