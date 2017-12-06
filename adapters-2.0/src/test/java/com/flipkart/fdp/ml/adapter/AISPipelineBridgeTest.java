@@ -28,10 +28,10 @@ public class AISPipelineBridgeTest extends SparkTestBase {
 	public void testPipeline() {
 		//prepare data
 		JavaRDD<Row> rdd = jsc.parallelize(Arrays.asList(
-				RowFactory.create(1, "Kakinada, Andhra Pradesh, gandhinagar.near:kkr's gowtham model school .venkateswaraswamy temple", "venkateswaraswmy temple", 0.0),
-				RowFactory.create(2, "Lake Garden appt, E2/24,3rd floor ,6th main road,Mogappair Eri Scheme,Chennai-37", "SBIOA", 0.0),
-				RowFactory.create(3, "71/2RT SAIDABAD COLONY", "Ramalayam Temple Arch.", 0.0),
-				RowFactory.create(3, "To badalpra , ta veraval, dis gir somnatha,vaya prbhaspatan, post kajli ,cite veraval", "", 1.0)
+				RowFactory.create(1, "Kakinada, Andhra Pradesh, gandhinagar.near:kkr's gowtham model school .venkateswaraswamy temple","venkateswaraswmy temple", 0.0),
+				RowFactory.create(2, "Lake Garden appt, E2/24,3rd floor ,6th main road,Mogappair Eri Scheme,Chennai-37","SBIOA", 0.0),
+				RowFactory.create(3, "71/2RT SAIDABAD COLONY","Ramalayam Temple Arch.", 0.0),
+				RowFactory.create(3, "To badalpra , ta veraval, dis gir somnatha,vaya prbhaspatan, post kajli ,cite veraval",",VERAVAL,IN,Gir somnatha,362268", 1.0)
 		));
 
 		StructType schema = new StructType(new StructField[]{

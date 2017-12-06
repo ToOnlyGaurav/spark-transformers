@@ -57,7 +57,11 @@ class PopularWordsModel(override val uid: String, val popularWords: Array[String
 
   def commonFraction = udf { (words: Seq[String]) =>
     val commonWords = words.filter(popularWords.contains(_))
-    commonWords.length.toDouble / words.length
+    if( words.nonEmpty) {
+      commonWords.length.toDouble / words.length
+    }else {
+      0.0
+    }
   }
 
   override def transform(dataset: Dataset[_]): DataFrame = {
