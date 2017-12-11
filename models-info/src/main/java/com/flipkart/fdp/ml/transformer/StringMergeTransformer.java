@@ -15,8 +15,6 @@ public class StringMergeTransformer implements Transformer {
 
 	@Override
 	public void transform(Map<String, Object> input) {
-		int size = modelInfo.getInputKeys().size();
-
 		Iterator<String> iterator = modelInfo.getInputKeys().iterator();
 
 		String input1 = (String) input.get(iterator.next());

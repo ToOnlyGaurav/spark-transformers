@@ -31,7 +31,7 @@ public class AISPipelineBridgeTest extends SparkTestBase {
 				RowFactory.create(1, "Kakinada, Andhra Pradesh, gandhinagar.near:kkr's gowtham model school .venkateswaraswamy temple","venkateswaraswmy temple", 0.0),
 				RowFactory.create(2, "Lake Garden appt, E2/24,3rd floor ,6th main road,Mogappair Eri Scheme,Chennai-37","SBIOA", 0.0),
 				RowFactory.create(3, "71/2RT SAIDABAD COLONY","Ramalayam Temple Arch.", 0.0),
-				RowFactory.create(3, "To badalpra , ta veraval, dis gir somnatha,vaya prbhaspatan, post kajli ,cite veraval",",VERAVAL,IN,Gir somnatha,362268", 1.0)
+				RowFactory.create(4, "To badalpra , ta veraval, dis gir somnatha,vaya prbhaspatan, post kajli ,cite veraval",",VERAVAL,IN,Gir somnatha,362268", 1.0)
 		));
 
 		StructType schema = new StructType(new StructField[]{
@@ -139,25 +139,8 @@ public class AISPipelineBridgeTest extends SparkTestBase {
 			double expectedRawPred = denseVector.toArray()[0];
 			double expectedRawPrediction = 1.0 / (1.0 + Math.exp(-expectedRawPred));
 			double actualRawPrediction = 1 - (double) data.get("probability");
-//			System.out.println("expectedRawPrediction:" + expectedRawPrediction + ", actualRawPrediction:" + actualRawPrediction);
-//			System.out.println(data);
 
-			assertEquals(expectedRawPrediction, actualRawPrediction, 0.00001);
-
-			String addressLine1 = row.getString(1);
-			String addressLine2 = row.getString(2);
-
-
-			if (actualRawPrediction < 0.002) {
-				System.out.println(addressLine1 + " " + addressLine2 + " is BAD has score : " + actualRawPrediction);
-			} else if (actualRawPrediction < 0.5) {
-				System.out.println(addressLine1 + " " + addressLine2 + " is WARN has score : " + actualRawPrediction);
-			} else {
-				System.out.println(addressLine1 + " " + addressLine2 + " is OK  has score : " + actualRawPrediction);
-			}
-			DenseVector actualProbability = (DenseVector) row.get(14);
-//			assertEquals("favouredStart should be equals", actualProbability.toArray()[1], data.get("probability"));
-//			assertEquals("prediction should be equals", row.get(14), data.get("prediction"));
+			assertEquals(expectedRawPrediction, actualRawPrediction, 0.0000001);
 		}
 	}
 }
