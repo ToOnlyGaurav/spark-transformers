@@ -24,7 +24,7 @@ public class LogisticRegression1BridgeTest extends SparkTestBase {
     @Test
     public void testLogisticRegression() {
         //prepare data
-        String datapath = "/Users/gaurav.prasad/gitCurrent/github/my/spark-transformers/adapters-2.0/src/test/resources/binary_classification_test.libsvm";
+        String datapath = "src/test/resources/binary_classification_test.libsvm";
 
         Dataset<Row> trainingData = spark.read().format("libsvm").load(datapath);
 
